@@ -2,36 +2,23 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <vector>
 
 
-std::vector<std::string> split(std::string line){
-    std::istringstream iss(line);  // создание потока для чтения строки
-    std::string word;
-    std::vector<std::string> area;
-
-    while (iss >> word) {  // чтение слов из потока
-        area.push_back(word);
-    }
-    return area;
-}
-
-
-std::string getAreaIdFromName(std::string name){
+std::string getAreaIdFromName(const std::string& name){
     std::ifstream file("static/area");
     std::string line;
     
     if (file.is_open()){
     while (std::getline(file, line)) {
             std::istringstream iss(line); 
-            Area area;
-            std::getline(iss, area.id, '\t');
-            std::getline(iss, area.gid, '\t');
-            std::getline(iss, area.name, '\t');
+            std::string area_id, area_gid, area_name;
+            std::getline(iss, area_id, '\t');
+            std::getline(iss, area_gid, '\t');
+            std::getline(iss, area_name, '\t');
 
             
-            if (area.name == name){
-                return area.id; 
+            if (area_name == name){
+                return area_id; 
             };
         };
         file.close();
@@ -42,7 +29,7 @@ std::string getAreaIdFromName(std::string name){
 };
 
 
-bool isArtistFromArea(std::string artist, std::string areaId){
+bool isArtistFromArea(const std::string& artist, const std::string& areaId){
     std::istringstream iss(artist); 
     std::string temp, artist_type, artist_area;
     // пропускаем первые 9 элементов
@@ -61,7 +48,8 @@ bool isArtistFromArea(std::string artist, std::string areaId){
     }
 };
 
-size_t countArtistsFromArea(std::string areaId){
+
+size_t countArtistsFromArea(const std::string& areaId){
     std::ifstream file("static/artist");
     std::string artist;
     size_t count = 0;
