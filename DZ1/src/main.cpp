@@ -2,25 +2,28 @@
 #include <string>
 #include "../include/struct.h"
 
-using namespace std;
-
 
 int main(int argc, char* argv[]){
-    if (argc > 1){
-        string search_name = argv[1];
-        for (int i = 2; i < argc; ++i) {
-            search_name += " " + string(argv[i]);
+    if (argc > 3){
+        std::string AreaFileName = std::string(argv[1]);
+        std::string ArtistFileName = std::string(argv[2]);
+        std::string searchName = argv[3];
+        for (int i = 4; i < argc; ++i) {
+            searchName += " " + std::string(argv[i]);
         }
 
-        string area_id = getAreaIdFromName(search_name);
-        if (!area_id.empty()) {
-            cout << "Input: " << search_name << ", Id = " << area_id << endl;
-            cout << "Groups from this place = " << countArtistsFromArea(area_id) << endl;
+        std::string areaId = getAreaIdFromName(searchName, AreaFileName);
+        if (!areaId.empty()) {
+            std::cout << "Input: " << searchName << ", Id = " << areaId << std::endl;
+            std::cout << "Groups from this place = " << countArtistsFromArea(areaId, ArtistFileName) << std::endl;
         } else {
-            cout << "Id of place \"" << search_name << "\" not found" << endl;
-        };
+            std::cout << "Id of place \"" << searchName << "\" not found" << std::endl;
+        }
     } else {
-        cout << "Place name wasn`t specified" << endl;
+        if (argc == 1) {
+            std::cout << "Files with areas, artists and place name weren`t specified" << std::endl;
+        }
+        std::cout << "Place name wasn`t specified" << std::endl;
     }
     return 0;
 }

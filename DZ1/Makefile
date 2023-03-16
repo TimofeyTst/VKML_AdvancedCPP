@@ -14,7 +14,7 @@ all: $(BIN)/$(EXECUTABLE)
 
 run: clean all
 	clear
-	./$(BIN)/$(EXECUTABLE) "China"
+	./$(BIN)/$(EXECUTABLE) area artist China
 
 $(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $@ $(LIBRARIES)

@@ -4,26 +4,24 @@
 #include <sstream>
 
 
-std::string getAreaIdFromName(const std::string& name){
-    std::ifstream file("static/area");
+std::string getAreaIdFromName(const std::string& name, const std::string& fileName){
+    std::ifstream file("static/" + fileName);
     std::string line;
     
     if (file.is_open()){
     while (std::getline(file, line)) {
             std::istringstream iss(line); 
-            std::string area_id, area_gid, area_name;
-            std::getline(iss, area_id, '\t');
-            std::getline(iss, area_gid, '\t');
-            std::getline(iss, area_name, '\t');
-
-            
-            if (area_name == name){
-                return area_id; 
+            std::string areaId, areaGid, areaName;
+            std::getline(iss, areaId, '\t');
+            std::getline(iss, areaGid, '\t');
+            std::getline(iss, areaName, '\t');
+            if (areaName == name){
+                return areaId; 
             };
         };
         file.close();
     } else {
-        std::cout << "File not found\n";
+        std::cout << "File '" << fileName << " not found in directory 'static'\n";
     };
     return "";
 };
@@ -31,17 +29,20 @@ std::string getAreaIdFromName(const std::string& name){
 
 bool isArtistFromArea(const std::string& artist, const std::string& areaId){
     std::istringstream iss(artist); 
-    std::string temp, artist_type, artist_area;
-    // пропускаем первые 9 элементов
+    std::string temp, artistType, artistArea;
+    // пропускаем первые 9 элементов, так как они содержат поля,
+    // не представляющее для нас интереса: id; gid; name; sort_name; 
+    // begin_date_year; begin_date_month; begin_date_day; 
+    // end_date_year; end_date_month; end_date_day;
     for (size_t i = 0; i < 10; i++) {
         std::getline(iss, temp, '\t');
     }
     // считываем 10-й элемент
-    std::getline(iss, artist_type, '\t');
+    std::getline(iss, artistType, '\t');
     // считываем 11-й элемент
-    std::getline(iss, artist_area, '\t');
+    std::getline(iss, artistArea, '\t');
 
-    if (artist_type == "2" && artist_area == (areaId)){
+    if (artistType == "2" && artistArea == (areaId)){
         return true;
     } else {
         return false;
@@ -49,8 +50,8 @@ bool isArtistFromArea(const std::string& artist, const std::string& areaId){
 };
 
 
-size_t countArtistsFromArea(const std::string& areaId){
-    std::ifstream file("static/artist");
+size_t countArtistsFromArea(const std::string& areaId, const std::string& fileName){
+    std::ifstream file("static/" + fileName);
     std::string artist;
     size_t count = 0;
     if (file.is_open()){
@@ -60,7 +61,7 @@ size_t countArtistsFromArea(const std::string& areaId){
         file.close();
         return count;
     } else {
-        std::cout << "File not found\n";
+        std::cout << "File '" << fileName << " not found in directory 'static'\n";
         return 0;
     };
 };
