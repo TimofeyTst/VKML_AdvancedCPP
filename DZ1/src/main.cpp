@@ -5,17 +5,17 @@
 
 int main(int argc, char* argv[]){
     if (argc > 3){
-        std::string AreaFileName = std::string(argv[1]);
-        std::string ArtistFileName = std::string(argv[2]);
+        std::string areaFileName = std::string(argv[1]);
+        std::string artistFileName = std::string(argv[2]);
         std::string searchName = argv[3];
         for (int i = 4; i < argc; ++i) {
             searchName += " " + std::string(argv[i]);
         }
-
-        std::string areaId = getAreaIdFromName(searchName, AreaFileName);
+        
+        std::string areaId = getAreaIdFromName(searchName, areaFileName);
         if (!areaId.empty()) {
             std::cout << "Input: " << searchName << ", Id = " << areaId << std::endl;
-            std::cout << "Groups from this place = " << countArtistsFromArea(areaId, ArtistFileName) << std::endl;
+            std::cout << "Groups from this place = " << countArtistsFromArea(areaId, artistFileName) << std::endl;
         } else {
             std::cout << "Id of place \"" << searchName << "\" not found" << std::endl;
         }
