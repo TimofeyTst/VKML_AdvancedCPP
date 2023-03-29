@@ -13,8 +13,7 @@ EXECUTABLE	:= main
 all: $(BIN)/$(EXECUTABLE)
 
 run: clean all
-	clear
-	./$(BIN)/$(EXECUTABLE) 'echo million$ | cat text.txt | cat zarplata.txt'
+	./$(BIN)/$(EXECUTABLE) 'echo million | cat static/text.txt | cat static/zarplata.txt'
 
 $(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $@ $(LIBRARIES)

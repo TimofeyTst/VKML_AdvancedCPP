@@ -6,14 +6,13 @@ class IOperation {
 public:
     IOperation() : next_operation_(nullptr) {}
     IOperation(IOperation * op) : next_operation_(op) {}
+
     virtual void ProcessLine(const std::string& str) = 0;
     virtual void HandleEndOfInput() = 0;
     virtual void SetNextOperation(IOperation* operation) = 0;
-    virtual ~IOperation() {
-        if(next_operation_){
-            delete next_operation_;
-        }
-    }
+
+    virtual ~IOperation() {}
+    
     IOperation* next_operation_;
 };
 
@@ -72,39 +71,4 @@ public:
     
 private:
     std::string filename_;
-};
-
-class OperationsList {
-public:
-    OperationsList() : head_(nullptr), tail_(nullptr) {}
-
-    void AddOperation(IOperation* op) {
-        if (!head_) {
-            head_ = op;
-            tail_ = op;
-        } else {
-            tail_->SetNextOperation(op);
-            tail_ = op;
-        }
-    }
-
-    void RunOperations() {
-        if (head_) {
-            head_->HandleEndOfInput();
-        }
-    }
-
-    virtual ~OperationsList() {
-        IOperation* cur = head_;
-        IOperation* prev;
-        while (cur) {
-            prev = cur;
-            cur = cur->next_operation_;
-            delete prev;
-        }
-    }
-
-private:
-    IOperation* head_;
-    IOperation* tail_;
 };
