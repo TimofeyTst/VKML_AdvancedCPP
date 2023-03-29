@@ -5,6 +5,7 @@
 class OperationsList {
 public:
     OperationsList() : head_(nullptr), tail_(nullptr) {}
+    // input копируем, так как в далньейшем в функции он будет меняться
     OperationsList(std::string input);
 
     void AddOperation(IOperation* op);

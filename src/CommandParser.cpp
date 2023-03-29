@@ -4,19 +4,23 @@ OperationsList::OperationsList(std::string input) : head_(nullptr), tail_(nullpt
     size_t pos = 0;
     std::string token;
 
+    // Пока есть разделители, запоминаем позицию
     while ((pos = input.find(delimiter)) != std::string::npos) {
+        // Получаем подстроку до разделителя
         token = input.substr(0, pos);
+        // Удаляем ее из input учитывая длину разделителя
         input.erase(0, pos + delimiter.length());
 
         if (token.find("echo") == 0) {
-            std::string str = token.substr(5);
+            std::string str = token.substr(5); // Достаем переданную строку
             AddOperation(new EchoOperation(str));
         } else if (token.find("cat") == 0) {
-            std::string file = token.substr(4);
+            std::string file = token.substr(4); // Достаем переданный файл
             AddOperation(new CatOperation(file));
         }
     }
 
+    // Последняя команда указана без разделителя, обрабатываем ее
     if (!input.empty()) {
         if (input.find("echo") == 0) {
             std::string str = input.substr(5);
