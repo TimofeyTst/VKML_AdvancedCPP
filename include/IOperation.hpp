@@ -9,7 +9,7 @@ public:
 
     virtual void ProcessLine(const std::string& str) = 0;
     virtual void HandleEndOfInput() = 0;
-    virtual void SetNextOperation(IOperation* operation) = 0;
+    virtual void SetNextOperation(IOperation* operation);
 
     virtual ~IOperation() {}
     
@@ -21,20 +21,8 @@ public:
     EchoOperation() : IOperation(nullptr) {}
     EchoOperation(std::string& str, IOperation* operation = nullptr) : IOperation(operation), str_(str) {}
 
-    void ProcessLine(const std::string& str) override {
-        std::cout << str << std::endl;
-    }
-
-    void HandleEndOfInput() override {
-        ProcessLine(str_);
-        if(next_operation_) {
-            next_operation_->HandleEndOfInput();
-        }
-    }
-
-    void SetNextOperation(IOperation* operation) override {
-        next_operation_ = operation;
-    }
+    void ProcessLine(const std::string& str) override;
+    void HandleEndOfInput() override;
 
 private:
     std::string str_;
@@ -46,28 +34,9 @@ public:
     CatOperation() : IOperation(nullptr) {}
     CatOperation(std::string& filename, IOperation* next_operation = nullptr) : IOperation(next_operation), filename_(filename) {}
     
-    void ProcessLine(const std::string& str) override {
-        std::ifstream file_(str);
-        if (!file_.is_open()) {
-            throw std::runtime_error("Cannot open file: " + str);
-        }
-        // читаем строки из файла и выводим их
-        std::string line;
-        while (std::getline(file_, line)) {
-            std::cout << line << std::endl;
-        }
-    }
+    void ProcessLine(const std::string& str) override;
     
-    void HandleEndOfInput() override {
-        ProcessLine(filename_);
-        if (next_operation_) {
-            next_operation_->HandleEndOfInput();
-        }
-    }
-    
-    void SetNextOperation(IOperation* operation) override {
-        next_operation_ = operation;
-    }
+    void HandleEndOfInput() override;
     
 private:
     std::string filename_;
