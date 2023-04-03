@@ -12,6 +12,7 @@ public:
     OperationsList(std::string input);
 
     void AddOperation(std::shared_ptr<IOperation>&& operation);
+    void AddOperation(const std::string token);
     void RunOperations();
 
 private:

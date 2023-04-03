@@ -3,32 +3,32 @@
 OperationsList::OperationsList(std::string input) : head_(nullptr), tail_(nullptr)  {
     size_t pos = 0;
     std::string token;
-
+    
     // Пока есть разделители, запоминаем позицию
     while ((pos = input.find(delimiter)) != std::string::npos) {
         // Получаем подстроку до разделителя
         token = input.substr(0, pos);
         // Удаляем ее из input учитывая длину разделителя
-        input.erase(0, pos + delimiter.length());
-
-        if (token.find("echo") == 0) {
-            std::string str = token.substr(5); // Достаем переданную строку
-            AddOperation(std::make_shared<EchoOperation>(str));
-        } else if (token.find("cat") == 0) {
-            std::string file = token.substr(4); // Достаем переданный файл
-            AddOperation(std::make_shared<CatOperation>(file));
-        }
+        input = input.substr(pos + delimiter.length());
+        AddOperation(token);
     }
 
     // Последняя команда указана без разделителя, обрабатываем ее
     if (!input.empty()) {
-        if (input.find("echo") == 0) {
-            std::string str = input.substr(5);
-            AddOperation(std::make_shared<EchoOperation>(str));
-        } else if (input.find("cat") == 0) {
-            std::string file = input.substr(4);
-            AddOperation(std::make_shared<CatOperation>(file));
-        }
+        AddOperation(input);
+    }
+}
+
+void OperationsList::AddOperation(const std::string token){
+    const std::string ECHO = "echo";
+    const std::string CAT = "cat";
+
+    if (token.find(ECHO) == 0) {
+        std::string str = token.substr(ECHO.length() + 1); // Достаем переданную строку
+        AddOperation(std::make_shared<EchoOperation>(str));
+    } else if (token.find(CAT) == 0) {
+        std::string file = token.substr(CAT.length() + 1); // Достаем переданный файл
+        AddOperation(std::make_shared<CatOperation>(file));
     }
 }
 
