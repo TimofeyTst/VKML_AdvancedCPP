@@ -1,25 +1,26 @@
 #include "CommandParser.hpp"
 
-OperationsList::OperationsList(std::string input) : head_(nullptr), tail_(nullptr)  {
+OperationsList::OperationsList(const std::string& input) : head_(nullptr), tail_(nullptr)  {
     size_t pos = 0;
     std::string token;
-    
+    std::string_view cursor(input);
+
     // Пока есть разделители, запоминаем позицию
-    while ((pos = input.find(delimiter)) != std::string::npos) {
+    while ((pos = cursor.find(delimiter)) != std::string::npos) {
         // Получаем подстроку до разделителя
-        token = input.substr(0, pos);
+        token = cursor.substr(0, pos);
         // Удаляем ее из input учитывая длину разделителя
-        input = input.substr(pos + delimiter.length());
+        cursor = cursor.substr(pos + delimiter.length());
         AddOperation(token);
     }
 
     // Последняя команда указана без разделителя, обрабатываем ее
-    if (!input.empty()) {
-        AddOperation(input);
+    if (!cursor.empty()) {
+        AddOperation(std::string(cursor));
     }
 }
 
-void OperationsList::AddOperation(const std::string token){
+void OperationsList::AddOperation(const std::string& token){
     const std::string ECHO = "echo";
     const std::string CAT = "cat";
 
