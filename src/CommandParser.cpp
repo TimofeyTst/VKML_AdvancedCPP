@@ -13,10 +13,10 @@ OperationsList::OperationsList(std::string input) : head_(nullptr), tail_(nullpt
 
         if (token.find("echo") == 0) {
             std::string str = token.substr(5); // Достаем переданную строку
-            AddOperation(new EchoOperation(str));
+            AddOperation(std::make_shared<EchoOperation>(str));
         } else if (token.find("cat") == 0) {
             std::string file = token.substr(4); // Достаем переданный файл
-            AddOperation(new CatOperation(file));
+            AddOperation(std::make_shared<CatOperation>(file));
         }
     }
 
@@ -24,22 +24,22 @@ OperationsList::OperationsList(std::string input) : head_(nullptr), tail_(nullpt
     if (!input.empty()) {
         if (input.find("echo") == 0) {
             std::string str = input.substr(5);
-            AddOperation(new EchoOperation(str));
+            AddOperation(std::make_shared<EchoOperation>(str));
         } else if (input.find("cat") == 0) {
             std::string file = input.substr(4);
-            AddOperation(new CatOperation(file));
+            AddOperation(std::make_shared<CatOperation>(file));
         }
     }
 }
 
 
-void OperationsList::AddOperation(IOperation* op) {
+void OperationsList::AddOperation(std::shared_ptr<IOperation>&& operation) {
     if (!head_) {
-        head_ = op;
-        tail_ = op;
+        head_ = std::move(operation);
+        tail_ = head_;
     } else {
-        tail_->SetNextOperation(op);
-        tail_ = op;
+        tail_->SetNextOperation(std::move(operation));
+        tail_ = tail_->next_operation_;
     }
 }
 
@@ -47,16 +47,5 @@ void OperationsList::AddOperation(IOperation* op) {
 void OperationsList::RunOperations() {
     if (head_) {
         head_->HandleEndOfInput();
-    }
-}
-
-
-OperationsList::~OperationsList() {
-    IOperation* cur = head_;
-    IOperation* next;
-    while (cur) {
-        next = cur->next_operation_;
-        delete cur;
-        cur = next;
     }
 }

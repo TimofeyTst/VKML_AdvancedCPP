@@ -7,9 +7,14 @@ int main(int argc, char* argv[]) {
         std::cerr << "Run program with arguments like: 'echo <someText> | cat <someFileName> | echo million | cat Elon.txt'\n";
         return 1;
     }
+    try{
+        OperationsList list(argv[1]);
+        list.RunOperations();
+    }
+    catch(const std::exception& e){
+        std::cerr << e.what() << '\n';
+    }
     
-    OperationsList list(argv[1]);
-    list.RunOperations();
 
     return 0;
 }

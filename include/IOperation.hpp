@@ -1,43 +1,17 @@
 #pragma once
 #include <iostream>
-#include <fstream>
+#include <memory>
 
 class IOperation {
 public:
-    IOperation() : next_operation_(nullptr) {}
-    IOperation(IOperation * op) : next_operation_(op) {}
+    IOperation() : next_operation_() {}
+    IOperation(std::shared_ptr<IOperation>&& operation) : next_operation_(std::move(operation)) {}
 
     virtual void ProcessLine(const std::string& str) = 0;
     virtual void HandleEndOfInput() = 0;
-    virtual void SetNextOperation(IOperation* operation);
+    virtual void SetNextOperation(std::shared_ptr<IOperation>&& operation);
 
     virtual ~IOperation() {}
     
-    IOperation* next_operation_;
-};
-
-class EchoOperation : public IOperation {
-public:
-    EchoOperation() : IOperation(nullptr) {}
-    EchoOperation(std::string& str, IOperation* operation = nullptr) : IOperation(operation), str_(str) {}
-
-    void ProcessLine(const std::string& str) override;
-    void HandleEndOfInput() override;
-
-private:
-    std::string str_;
-};
-
-
-class CatOperation : public IOperation {
-public:
-    CatOperation() : IOperation(nullptr) {}
-    CatOperation(std::string& filename, IOperation* next_operation = nullptr) : IOperation(next_operation), filename_(filename) {}
-    
-    void ProcessLine(const std::string& str) override;
-    
-    void HandleEndOfInput() override;
-    
-private:
-    std::string filename_;
+    std::shared_ptr<IOperation> next_operation_;
 };

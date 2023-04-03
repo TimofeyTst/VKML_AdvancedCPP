@@ -1,40 +1,6 @@
 #include "IOperation.hpp"
 
 // Реализуем по умолчанию метод интерфейсного класса
-void IOperation::SetNextOperation(IOperation* operation) {
-    next_operation_ = operation;
-}
-
-
-void EchoOperation::ProcessLine(const std::string& str) {
-    std::cout << str << std::endl;
-}
-
-
-void EchoOperation::HandleEndOfInput() {
-    ProcessLine(str_);
-    if(next_operation_) {
-        next_operation_->HandleEndOfInput();
-    }
-}
-
-
-void CatOperation::ProcessLine(const std::string& str) {
-    std::ifstream file_(str);
-    if (!file_.is_open()) {
-        throw std::runtime_error("Cannot open file: " + str);
-    }
-    // читаем строки из файла и выводим их
-    std::string line;
-    while (std::getline(file_, line)) {
-        std::cout << line << std::endl;
-    }
-}
-
-
-void CatOperation::HandleEndOfInput() {
-    ProcessLine(filename_);
-    if (next_operation_) {
-        next_operation_->HandleEndOfInput();
-    }
+void IOperation::SetNextOperation(std::shared_ptr<IOperation>&& operation) {
+    next_operation_ = std::move(operation);
 }

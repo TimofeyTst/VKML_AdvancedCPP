@@ -1,20 +1,21 @@
 #pragma once
 #include <iostream>
+#include <memory>
 #include "IOperation.hpp"
+#include "EchoOperation.hpp"
+#include "CatOperation.hpp"
 
 class OperationsList {
 public:
-    OperationsList() : head_(nullptr), tail_(nullptr) {}
+    OperationsList() : head_(), tail_() {}
     // input копируем, так как в далньейшем в функции он будет меняться
     OperationsList(std::string input);
 
-    void AddOperation(IOperation* op);
+    void AddOperation(std::shared_ptr<IOperation>&& operation);
     void RunOperations();
 
-    virtual ~OperationsList();
-
 private:
-    std::string delimiter = " | ";
-    IOperation* head_;
-    IOperation* tail_;
+    const std::string delimiter = " | ";
+    std::shared_ptr<IOperation> head_;
+    std::shared_ptr<IOperation> tail_;
 };
