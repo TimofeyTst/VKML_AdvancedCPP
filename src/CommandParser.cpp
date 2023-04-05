@@ -23,11 +23,11 @@ OperationsList::OperationsList(const std::string& input) : head_(nullptr), tail_
 void OperationsList::AddOperation(const std::string& token){
     const std::string ECHO = "echo";
     const std::string CAT = "cat";
-
-    if (token.find(ECHO) == 0) {
+    
+    if (token.starts_with(ECHO)) {
         std::string str = token.substr(ECHO.length() + 1); // Достаем переданную строку
         AddOperation(std::make_shared<EchoOperation>(str));
-    } else if (token.find(CAT) == 0) {
+    } else if (token.starts_with(CAT)) {
         std::string file = token.substr(CAT.length() + 1); // Достаем переданный файл
         AddOperation(std::make_shared<CatOperation>(file));
     }

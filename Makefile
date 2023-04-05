@@ -1,22 +1,21 @@
-CXX		  := g++
-CXX_FLAGS := -Wall -Wextra -std=c++17 -ggdb
+CXX := g++
+CXX_FLAGS := -Wall -Wextra -std=c++20 -ggdb
 
-BIN		:= bin
-SRC		:= src
-INCLUDE	:= include
-LIB		:= lib
+BIN := bin
+SRC := src
+INCLUDE := include
+LIB := lib
 
-LIBRARIES	:=
-EXECUTABLE	:= main
-
+LIBRARIES :=
+EXECUTABLE := main
 
 all: $(BIN)/$(EXECUTABLE)
 
 run: clean all
 	./$(BIN)/$(EXECUTABLE) 'echo million | cat static/text.txt | cat static/zarplata.txt'
 
-$(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
+$(BIN)/$(EXECUTABLE): $(wildcard $(SRC)/*.cpp)
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $@ $(LIBRARIES)
 
 clean:
-	-rm $(BIN)/*
+	-rm -f $(BIN)/*

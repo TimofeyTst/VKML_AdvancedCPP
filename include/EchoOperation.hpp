@@ -3,7 +3,7 @@
 #include <memory>
 #include "IOperation.hpp"
 
-class EchoOperation : public IOperation {
+class EchoOperation final : public IOperation {
 public:
     EchoOperation() : IOperation() {}
     EchoOperation(std::string& str, std::shared_ptr<IOperation>&& operation=nullptr) : IOperation(std::move(operation)), str_(str) {}
