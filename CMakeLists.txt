@@ -7,7 +7,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 file(GLOB SOURCES "src/*.cpp")
 
-# add_custom_target(run COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXECUTABLE} 'echo million | cat static/text.txt | cat static/zarplata.txt')
+# add_custom_target(run COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${EXECUTABLE} 'echo million | cat ../static/text.txt | cat ../static/zarplata.txt | wc -c | echo rambler | cat ../static/zarplata.txt | wc -c | cat ../static/text.txt | wc -c')
 # MakeFile удобнее, так как там я мог make run сразу запускать файл с переданной строкой
 
 add_executable(${PROJECT_NAME} ${SOURCES})

@@ -1,15 +1,15 @@
 #include "CommandParser.hpp"
 
-OperationsList::OperationsList(const std::string& input) : head_(nullptr), tail_(nullptr)  {
+OperationsList::OperationsList(const std::string& input) : pipeline_(input), head_(nullptr), tail_(nullptr) {
     size_t pos = 0;
     std::string token;
-    std::string_view cursor(input);
+    std::string_view cursor(pipeline_);
 
     // Пока есть разделители, запоминаем позицию
     while ((pos = cursor.find(delimiter)) != std::string::npos) {
         // Получаем подстроку до разделителя
         token = cursor.substr(0, pos);
-        // Удаляем ее из input учитывая длину разделителя
+        // Удаляем ее из pipeline_ учитывая длину разделителя
         cursor = cursor.substr(pos + delimiter.length());
         AddOperation(token);
     }
@@ -23,13 +23,18 @@ OperationsList::OperationsList(const std::string& input) : head_(nullptr), tail_
 void OperationsList::AddOperation(const std::string& token){
     const std::string ECHO = "echo";
     const std::string CAT = "cat";
-    
+    const std::string WC = "wc -c";
+
     if (token.starts_with(ECHO)) {
         std::string str = token.substr(ECHO.length() + 1); // Достаем переданную строку
         AddOperation(std::make_shared<EchoOperation>(str));
     } else if (token.starts_with(CAT)) {
         std::string file = token.substr(CAT.length() + 1); // Достаем переданный файл
+        fileNames_ += file + " ";
         AddOperation(std::make_shared<CatOperation>(file));
+    } else if (token == WC) {
+        AddOperation(std::make_shared<WcOperation>(fileNames_));
+        fileNames_ = "";
     }
 }
 

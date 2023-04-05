@@ -5,10 +5,11 @@
 #include "IOperation.hpp"
 #include "EchoOperation.hpp"
 #include "CatOperation.hpp"
+#include "WcOperation.hpp"
 
 class OperationsList {
 public:
-    OperationsList() : head_(), tail_() {}
+    OperationsList() : pipeline_(), fileNames_(),  head_(), tail_() {}
     // input копируем, так как в далньейшем в функции он будет меняться
     OperationsList(const std::string& input);
 
@@ -17,6 +18,8 @@ public:
     void RunOperations();
 
 private:
+    const std::string pipeline_;
+    std::string fileNames_;
     const std::string delimiter = " | ";
     std::shared_ptr<IOperation> head_;
     std::shared_ptr<IOperation> tail_;

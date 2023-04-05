@@ -12,7 +12,7 @@ EXECUTABLE := main
 all: $(BIN)/$(EXECUTABLE)
 
 run: clean all
-	./$(BIN)/$(EXECUTABLE) 'echo million | cat static/text.txt | cat static/zarplata.txt'
+	./$(BIN)/$(EXECUTABLE) 'echo million | cat static/text.txt | cat static/zarplata.txt | wc -c | echo rambler | cat static/zarplata.txt | wc -c | cat static/text.txt | wc -c'
 
 $(BIN)/$(EXECUTABLE): $(wildcard $(SRC)/*.cpp)
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $@ $(LIBRARIES)
