@@ -28,13 +28,22 @@ void OperationsList::AddOperation(const std::string& token){
     if (token.starts_with(ECHO)) {
         std::string str = token.substr(ECHO.length() + 1); // Достаем переданную строку
         AddOperation(std::make_shared<EchoOperation>(str));
-    } else if (token.starts_with(CAT)) {
+        return;
+    } 
+    
+    if (token.starts_with(CAT)) {
         std::string file = token.substr(CAT.length() + 1); // Достаем переданный файл
-        fileNames_ += file + " ";
         AddOperation(std::make_shared<CatOperation>(file));
-    } else if (token == WC) {
-        AddOperation(std::make_shared<WcOperation>(fileNames_));
-        fileNames_ = "";
+        return;
+    } 
+    
+    if (token.starts_with(WC)) {
+        std::string str;
+        if (token.length() > WC.length()) {
+            str = token.substr(WC.length() + 1); // Достаем переданную строку
+        }
+        AddOperation(std::make_shared<WcOperation>(str));
+        return;
     }
 }
 

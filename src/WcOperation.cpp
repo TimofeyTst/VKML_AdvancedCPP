@@ -1,27 +1,18 @@
 #include "WcOperation.hpp"
 
-void WcOperation::ProcessLine(const std::string& str) {
-    // str всегда вида "file1.txt file2.txt file3.txt " или ""
-    std::istringstream iss(str);
-    std::string filename;
-    int bytes = 0;
-    while (iss >> filename) { // Читаем имена файлов из потока
-        std::ifstream file(filename, std::ios::binary);
-        if (!file.is_open()) {
-            throw std::runtime_error("Cannot open file: " + filename);
-        }
+void WcOperation::ProcessLine(const std::string& pipeline) {
+    // вычисляем суммарное число байт в строке full_string = pipeline + str_
+    int total_bytes = sizeof(char) * (pipeline.size() + str_.size());
 
-        file.seekg(0, std::ios::end);
-        bytes += file.tellg();
+    // передаем pipeline + str_ в метод ProcessLine следующей операции
+    if (next_operation_) {
+        next_operation_->ProcessLine(std::to_string(total_bytes));
+    } else {
+        std::cout << total_bytes << std::endl;
     }
-    // Выводим результат в стандартный поток вывода
-    std::cout << "Total bytes: " << bytes << std::endl;
 }
 
 
 void WcOperation::HandleEndOfInput() {
-    ProcessLine(pipeline_);
-    if (next_operation_) {
-        next_operation_->HandleEndOfInput();
-    }
+    ProcessLine("");
 }

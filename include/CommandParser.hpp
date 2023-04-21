@@ -9,7 +9,7 @@
 
 class OperationsList {
 public:
-    OperationsList() : pipeline_(), fileNames_(),  head_(), tail_() {}
+    OperationsList() : pipeline_(), head_(), tail_() {}
     // input копируем, так как в далньейшем в функции он будет меняться
     OperationsList(const std::string& input);
 
@@ -19,7 +19,6 @@ public:
 
 private:
     const std::string pipeline_;
-    std::string fileNames_;
     const std::string delimiter = " | ";
     std::shared_ptr<IOperation> head_;
     std::shared_ptr<IOperation> tail_;
